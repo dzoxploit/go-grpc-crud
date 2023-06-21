@@ -1,0 +1,35 @@
+
+syntax = "proto3"; 
+package golang_protobuf_contact;
+option go_package="/golang_protobuf_contact";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
+
+message ProtoContactRepo {
+    message ProtoContact {
+        string ID = 1;
+        string Name = 2;
+        string Gender = 3;
+        string Phone = 4;
+        string Email = 5;
+        google.protobuf.Timestamp Created_at = 6;
+        google.protobuf.Timestamp Updated_at = 7;
+    }
+    repeated ProtoContact contacts = 1;
+}
+
+message UpdateRequest {
+    google.protobuf.StringValue ID = 1;
+    ProtoContactRepo.ProtoContact Contact = 2;
+}
+
+service CRUD {
+	rpc Create(ProtoContactRepo.ProtoContact) returns (ProtoContactRepo.ProtoContact);
+    	rpc GetList(google.protobuf.Empty) returns (stream ProtoContactRepo.ProtoContact);
+    	rpc GetOne(google.protobuf.StringValue) returns (ProtoContactRepo.ProtoContact);
+	rpc Update(UpdateRequest) returns (ProtoContactRepo.ProtoContact);
+	rpc Delete(google.protobuf.StringValue) returns (google.protobuf.BoolValue);
+}
